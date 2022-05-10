@@ -1,142 +1,107 @@
-# import scrapy
-# import re
-# from scrapy_splash import SplashRequest
-# from selenium.common.exceptions import TimeoutException
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium import webdriver
-# from jdsc.items import JdscItem,General_Category,Subclass
-# import threading
-# import time
-# from selenium.webdriver.chrome.options import Options
-# chrome_options = Options()
-# chrome_options.add_argument('--headless')
-# chrome_options.add_argument('--load-images=false')
-# chrome_options.add_argument('--disable-gpu')#上面三行代码就是为了将Chrome不弹出界面，实现无界面爬取
-# brower = webdriver.Chrome(chrome_options=chrome_options)
-# wait=WebDriverWait(brower,10)
-# brower.maximize_window()
-#
-# # splash.scroll_position = {x=..., y=...}
-# # splash.resource_timeout = 600.0
-# script = """
-# assert(splash:go(args.url))
-# splash:set_user_agent("Mozilla/5.0")
-# splash:runjs("document.documentElement.scrollTop=10000")
-# splash.images_enabled = false
-# splash:on_request(function(request)
-#     filters=nofonts,easylist
-#     if first then
-#         request:set_timeout(2)
-#         first = false
-#     end
-#     if request.url:find('ad_ids') ~= nil then
-#         request:abort()
-#     end
-# end)
-# return {html = splash:html()}
-# """
-#
-# class JdSpider(scrapy.Spider):
-#     name = 'jd1'
-#     allowed_domains = ['.jd.com']
-#     start_urls = ['https://www.jd.com/allSort.aspx']
-#     # start_urls = ['http://localhost:8050/render.html?url=https://item.jd.com/100014348492.html']
-#     # start_urls = ['https://list.jd.com/list.html?cat=9987,653,655']
-#     def make_requests_from_url(self, url):
-#         # return scrapy.Request(url,callback=self.spxq)
-#         return SplashRequest(url, callback=self.parse, args={'lua_source': script})
-#
-#         # return scrapy.Request(url, callback=self.spxq)
-#
-#     def parse(self, response):#所有类别的url
-#         a=response.xpath('/html/body/div[5]/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/dl/dd/a/@href').getall()
-#         self.logger.debug(a)
-#         item1 = General_Category()
-#         for i in a[20:25]:
-#             url='https:'+i
-#             item1['URL']=url
-#             self.get_url(url)
-#             # t = threading.Thread(target=self.get_url(url), args=("t1",))
-#             # t.start()
-#
-#     def get_url(self,url):
-#         try:
-#             brower.get(url)
-#             self.paser_next()
-#         except TimeoutException:
-#             return self.get_url(url)
-#
-#     def paser_next(self):
-#         try:
-#             submit = wait.until(
-#                 EC.presence_of_element_located((By.CSS_SELECTOR, "#key")))
-#             submit.click()
-#             brower.execute_script("document.documentElement.scrollTop=10000")
-#             time.sleep(5)
-#             html = brower.page_source
-#
-#             submit1 = wait.until(
-#                 EC.presence_of_element_located((By.CSS_SELECTOR, "#J_bottomPage > span.p-num > a.pn-next")))
-#             self.paser_url(html)
-#             submit1.click()
-#             return self.paser_next()
-#         except TimeoutException:
-#             return self.paser_next()
-#
-#     def paser_url(self,html):
-#         b = list(set(re.findall('<a target="_blank" title=.*?href="(//item.jd.com/.*?)" onclick=', html, re.S)))
-#         item2 = Subclass()
-#         for i in b[:2]:
-#             url = 'http://localhost:8050/render.html?url=https:' + i
-#             item2['URL'] = url
-#             yield scrapy.Request(url, callback=self.spxq)
-#     #         yield SplashRequest(url,callback=self.spxq,endpoint='run',args={'lua_source': script})
-#
-#     def spxq(self,response):
-#         # self.logger.debug(response.text)
-#         spdetail={
-#             'title':response.xpath('/html/body/div[6]/div/div[2]/div[1]/text()').getall(),
-#             'price':response.xpath('/html/body/div[6]/div/div[2]/div[3]/div/div[1]/div[2]/span[1]/span[2]/text()').get(),
-#             'evaluate':response.xpath('//*[@id="comment-count"]/a/text()').get(),
-#             'parameter':response.xpath('//*[@id="detail"]/div[2]/div[1]/div[1]').xpath('string(.)').extract()
-#         }
-#         self.logger.debug(spdetail)
-#         item = JdscItem()
-#         for field in item.fields:
-#             item[field] = spdetail[field]
-#         cc=response.xpath('//*[@id="choose-attr-1"]/div[1]/text()').getall()
-#         if cc==[]:
-#             pass
-#         else:
-#             cc_list=response.xpath('//*[@id="choose-attr-1"]/div[2]/div/text()').getall()
-#             for i in cc_list:
-#                 url='https://item.jd.com/{}.html'.format(i)
-#                 yield SplashRequest(url=url,callback=self.spxq,endpoint='run',args={'lua_source': script})
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-import random
-ua=['Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
-    'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
-    'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0','Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0',
-    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0','Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1',
-    'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1','Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto/2.8.131 Version/11.11',
-    'Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
-    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon 2.0','Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0',
-    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1','Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; The World',
-    'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SE 2.X MetaSr 1.0; SE 2.X MetaSr 1.0; .NET CLR 2.0.50727; SE 2.X MetaSr 1.0',
-    ' Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE','Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Avant Browser','Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1']
-useragent=random.choice(ua)
-print(useragent)
+import re
+import scrapy
+from jdsc.items import JdscItem
+from redis import Redis
+from jdsc.settings import *
+import time
+class JdSpider(scrapy.Spider):
+    name = 'jd'
+    start_urls = ['https://www.jd.com/allSort.aspx']
+    conn = Redis(host=ip, port=6379, password='123456a')
+    def parse(self, response):#所有类别的url
+        leibie_list=response.xpath('/html/body/div[5]/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/dl/dd/a/@href').getall()
+        for i in leibie_list[60:]:
+            b=re.findall('//list.jd.com/list.html\?cat=(.*?),(.*?),(.*)',i)
+            if b==[]:
+                pass
+            else:
+                c=list(b[0])
+                c.append(str(1))
+                while 1:
+                    ex = self.conn.sismember('jdscurls', str(c))
+                    if ex == 1 :
+                        self.log(str(c) + "已经爬取")
+                        c[3]=str(int(c[3])+1)
+                    else:
+                        if (int(c[3]) == 1):
+                            url='https://list.jd.com/list.html?cat={}%2C{}%2C{}&page=1&s=1&click=0'.format(c[0],c[1],c[2])
+                            yield scrapy.Request(url, callback=self.parse2)
+                        else:
+                            if (int(c[3]) % 2 == 1):
+                                url = 'https://list.jd.com/listNew.php?cat={}%2C{}%2C{}&page={}&s={}&scrolling=y&log_id={}&tpl=3_M&isList=1&show_items='.format(
+                                    c[0], c[1], c[2], int(c[3]) + 1, int(c[3]) * 30 - 3, time.time() * 1000)
+                                header = {
+                                    'referer': response.url,
+                                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
+                                    'x-requested-with': 'XMLHttpRequest',
+                                }
+
+                                yield scrapy.Request(url, callback=self.parse2, headers=header)
+
+                            else:
+                                url = 'https://list.jd.com/listNew.php?cat={}%2C{}%2C{}&page={}&s={}&click=0'.format(
+                                    c[0], c[1], c[2], int(c[3]) + 1, int(c[3]) * 30 - 3)
+                                yield scrapy.Request(url, callback=self.parse2)
+                            break
+    def parse2(self,response):#类别下所有商品
+        c = re.findall('.*?cat=(.*?)%2C(.*?)%2C(.*?)&page=(.*?)&s=.*', response.url)
+        if (int(c[0][3])%2==1):
+            sp_list = response.xpath('//*[@id="J_goodsList"]/ul/li')
+        else:
+            sp_list =response.xpath('/html/body/li')
+        self.log(len(sp_list))
+        for i in sp_list:
+            url1 = i.xpath('div/div[1]/a/@href').re('\/\/(item.jd.com/.*)')
+            if url1 == []:
+                pass
+            else:
+                shangping = {
+                    'price': i.css('.p-price').xpath('strong/i/text()').get(),
+                    'url': i.css('.p-img').xpath('a/@href').get(),
+                    'title': str(i.css('.p-name').xpath('a//text()').getall()).replace('[', '').replace(']',
+                                                                                                        '').replace(
+                        '\\t', '').replace('\\n', '').replace('\'', '').replace(',', ''),
+                    'youhui': i.css('.p-icons').xpath('i//text()').getall()
+                }
+                item = JdscItem()
+                for field in item.fields:
+                    item[field] = shangping[field]
+                yield item
+        self.conn.sadd('jdscurls', str(list(c[0])))
+        if len(sp_list) < 30:
+            self.logger.debug('没了')
+        else:
+            # 判断上页类型，根据类型确定下页走向
+
+            b = re.findall('.*?cat=(.*?)%2C(.*?)%2C(.*?)&page=(.*?)&s=.*', response.url)
+            if (int(b[0][3])>200):
+                pass
+            else:
+                if(int(b[0][3])%2==1):
+                    url='https://list.jd.com/listNew.php?cat={}%2C{}%2C{}&page={}&s={}&scrolling=y&log_id={}&tpl=3_M&isList=1&show_items='.format(b[0][0],b[0][1],b[0][2],int(b[0][3])+1,int(b[0][3])*30-3,time.time()*1000)
+                    header={
+                        'referer':response.url,
+                        'user-agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
+                        'x-requested-with':'XMLHttpRequest',
+                    }
+
+                    yield scrapy.Request(url, callback=self.parse2, headers=header)
+                else:
+                    url='https://list.jd.com/list.html?cat={}%2C{}%2C{}&page={}&s={}&click=0'.format(b[0][0],b[0][1],b[0][2],int(b[0][3])+1,int(b[0][3])*30-3)
+                    yield scrapy.Request(url, callback=self.parse2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
