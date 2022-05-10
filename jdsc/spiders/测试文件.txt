@@ -1,0 +1,65 @@
+1、scrapy shell http://localhost:8050/render.html?url=https://www.jd.com/
+2、response.xpath('//*[@id="cate_item1"]/div[1]/div[2]/dl[1]/dd/a[1]/@href').get()
+3、scrapy crawl jd2
+
+ https://list.jd.com/listNew.php?cat=1713%2C4855%2C4859
+ https://list.jd.com/list.html?cat=1713,4855,4859
+
+4、scrapy shell https://list.jd.com/listNew.php?cat=1713%2C4855%2C4870&page=2&s=57&click=0
+response.xpath('//*[@id="app"]/div[2]/div[2]/div/div[1]/div[1]/div/div/div/div/div/ul/li[1]/nav/a[1]/@href').get()
+scrapy shell http://localhost:8050/render.html?url=https://list.jd.com/list.html?cat=737,794,798
+response.xpath('//*[@id="J_goodsList"]/ul/li/div/div[3]/a/@href').getall()
+//*[@id="J_goodsList"]/ul/li/div/div[3]/a
+//*[@id="J_goodsList"]/ul/li[2]/div/div[3]/a
+
+scrapy shell http://localhost:8050/render.html?url=https://item.jd.com/10033542576394.html
+/html/body/div[6]/div/div[2]/div[1]/text()
+response.xpath('//*[@id="J_goodsList"]/ul/li')
+b[2].xpath('div/div[1]/a/@href').re('\/\/(item.jd.com/.*)')
+response.xpath('/html/body/div[6]/div/div[2]/div[1]/text()')
+response.xpath('/html/body/div[6]/div/div[2]/div[3]/div/div[1]/div[2]/span[1]/span[2]/text()').get()
+response.xpath('//*[@id="comment-count"]/a/text()').get()
+response.xpath('//*[@id="detail"]/div[2]/div[1]/div[1]/ul[2]/li/text()').getall()
+
+response.xpath('//*[@id="choose-attr-1"]/div[1]/text()').getall()
+
+response.xpath('//*[@id="choose-attr-1"]/div[2]/div/text()').getall()
+response.xpath('//*[@id="detail"]/div[2]/div[1]/div[1]/ul[2]/li[3]/a/text()').getall()
+//*[@id="detail"]/div[2]/div[1]/div[1]/ul[2]/li[3]/a
+
+b[1].css('.p-icons').xpath('i//text()').getall()
+'//*[@id="J_pro_64334230345"]/i[1]'
+
+所有商品分类
+scrapy shell http://localhost:8050/render.html?url=https://www.jd.com/allSort.aspx
+response.xpath('/html/body/div[5]/div[2]/div[1]/div[2]/div/div/div[2]/div[3]/dl/dd/a/@href').getall()
+
+每类商品url
+scrapy shell http://localhost:8050/render.html?url=https://list.jd.com/list.html?cat=9987,653,655
+
+scrapy shell http://localhost:8050/render.html?url=https://item.jd.com/100014348492.html
+response.body.decode('utf-8')
+gbk|gb2312|gb18030
+response.body.decode('gb18030')
+
+
+function main(splash, args)
+  splash:go(splash.args.url)
+  local scroll_to = splash:jsfunc("window.scrollTo")
+        scroll_to(0, 200000)
+            splash:wait(15)
+  splash:set_viewport_full()
+  splash:mouse_click(1,1)
+  splash.resource_timeout=120
+  splash.images_enabled = false
+   splash:on_request(function(request)
+    if string.find(request.url, "ShowInterface") ~= nil then
+        request.abort()
+    end
+end)
+  return {
+    html = splash:html(),
+    png = splash:png(),
+    har = splash:har(),
+  }
+end
