@@ -9,7 +9,7 @@
 import requests
 import random
 BOT_NAME = 'jdsc'
-ip='localhost'
+ip='172.19.240.1'
 SPIDER_MODULES = ['jdsc.spiders']
 NEWSPIDER_MODULE = 'jdsc.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -19,14 +19,14 @@ NEWSPIDER_MODULE = 'jdsc.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 16
+# CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 # DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 16
+# CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -76,7 +76,7 @@ EXTENSIONS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-MONGO_URI='localhost:27017'
+MONGO_URI='172.19.240.1:27017'
 MONGO_DATABASE='jd'
 MONGO_DATABASE1='总类url'
 MONGO_DATABASE2='小类url'
@@ -85,7 +85,7 @@ ITEM_PIPELINES = {
         'jdsc.pipelines.MongoPipeline': 300,
         # 'jdsc.pipelines.MongoPipeline1': 301,
         # 'jdsc.pipelines.MongoPipeline2': 302,
-        # 'scrapy_redis.pipelines.RedisPipeline': 299
+        'scrapy_redis.pipelines.RedisPipeline': 299
 
 }
 
@@ -123,3 +123,7 @@ ITEM_PIPELINES = {
 # }
 # DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 # HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+REDIS_URL = 'redis://:123456a@172.19.240.1:6379'
