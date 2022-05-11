@@ -1,6 +1,6 @@
 1、scrapy shell http://localhost:8050/render.html?url=https://www.jd.com/
 2、response.xpath('//*[@id="cate_item1"]/div[1]/div[2]/dl[1]/dd/a[1]/@href').get()
-3、scrapy crawl jd2
+3、scrapy crawl jd
 
  https://list.jd.com/listNew.php?cat=1713%2C4855%2C4859
  https://list.jd.com/list.html?cat=1713,4855,4859
