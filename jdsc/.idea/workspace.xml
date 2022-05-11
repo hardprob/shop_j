@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d179570f-c51b-46db-9c22-1f3655df515f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jdsc/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/jdsc/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jdsc/spiders/jd.py" beforeDir="false" afterPath="$PROJECT_DIR$/jdsc/spiders/jd.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jdsc/spiders/测试文件.txt" beforeDir="false" afterPath="$PROJECT_DIR$/jdsc/spiders/测试文件.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

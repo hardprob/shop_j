@@ -9,7 +9,7 @@
 import requests
 import random
 BOT_NAME = 'jdsc'
-ip='localhost'
+ip='192.168.0.100'
 SPIDER_MODULES = ['jdsc.spiders']
 NEWSPIDER_MODULE = 'jdsc.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -126,4 +126,4 @@ ITEM_PIPELINES = {
 
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-REDIS_URL = 'redis://:123456a@localhost:6379'
+REDIS_URL = 'redis://:123456a@192.168.0.100:6379'
